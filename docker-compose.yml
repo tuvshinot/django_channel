@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:10-alpine
+    environment:
+      - POSTGRES_DB=channel_app
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=supersecretpassword
+  redis:
+    image: redis:alpine
+  app:
+    build: .
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/src
+    environment:
+      - DB_HOST=db
+      - DB_NAME=channel_app
+      - DB_USER=postgres
+      - DB_PASSWORD=supersecretpassword
+    depends_on:
+      - db
+      - redis

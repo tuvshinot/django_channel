@@ -16,7 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from django.shortcuts import redirect, reverse
+
+# for now redirecting
+
+
+def redirect_to_chat(request):
+    return redirect(reverse('chat:index'))
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('chat/', include('chat.urls', namespace='chat'))
+    path('chat/', include('chat.urls', namespace='chat')),
+    path('', redirect_to_chat)
 ]
